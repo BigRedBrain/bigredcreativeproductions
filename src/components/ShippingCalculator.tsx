@@ -1,47 +1,20 @@
 "use client";
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import type { CartItem } from "@/data/cart";
-import { shippingCopy as copy, type ShippingRate } from "@/data/shipping";
+import { formatMoney } from "@/data/money";
+import { temporaryShippingEstimate, TEMPORARY_SHIPPING_NOTICE } from "@/data/temporary-shipping";
 
 export default function ShippingCalculator({ items }: { items: CartItem[] }) {
-  const [method, setMethod] = useState("pickup");
-  const [zip, setZip] = useState("");
-  const [result, setResult] = useState<{ key: string; rates: ShippingRate[]; message: string } | null>(null);
-  const [busy, setBusy] = useState(false);
-  const lines = items.map((item) => ({ productId: item.productId, quantity: item.quantity,
-    selectedPackageSlug: item.selectedPackage?.packageSlug,
-    selectedOptionValues: Object.fromEntries(item.selectedOptions.map((option) => [option.optionKey, option.value])),
-    selectedAddOnSlugs: item.selectedAddOns.map((addOn) => addOn.addOnSlug),
-  }));
-  const key = JSON.stringify({ lines, zip });
-  const current = result?.key === key ? result : null;
-  async function calculate(event: FormEvent) {
-    event.preventDefault(); setBusy(true); setResult(null);
-    try {
-      const response = await fetch("/api/shipping", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ zip, lines }) });
-      const data = await response.json();
-      setResult({ key, rates: response.ok && data.status === "quoted" ? data.rates : [],
-        message: !response.ok ? copy.failure : data.status === "digital" ? copy.digital : data.status === "quoted" ? "" : copy.unavailable });
-    } catch { setResult({ key, rates: [], message: copy.failure }); }
-    finally { setBusy(false); }
-  }
-  if (!items.some((item) => item.productType === "physical")) return <section className="shipping-calculator"><p>{copy.digital}</p></section>;
+  const [method, setMethod] = useState("ship");
+  const estimate = temporaryShippingEstimate(items);
+  if (!estimate) return <section className="shipping-calculator"><p>Digital services and artwork are delivered electronically at no shipping charge.</p></section>;
   return <section className="shipping-calculator" aria-labelledby="shipping-title">
-    <h2 id="shipping-title">{copy.title}</h2>
-    <p>{copy.selectionNotice}</p>
-    <label><input type="radio" name="estimate-delivery" checked={method === "pickup"} onChange={() => setMethod("pickup")} />{copy.pickup}</label>
-    <label><input type="radio" name="estimate-delivery" checked={method === "ship"} onChange={() => setMethod("ship")} />{copy.ship}</label>
-    {method === "pickup" ? <p>{copy.pickupDetails}</p> : <>
-      <form onSubmit={calculate}><label htmlFor="shipping-zip">{copy.zip}</label>
-        <input id="shipping-zip" autoComplete="postal-code" inputMode="numeric" pattern="[0-9]{5}(-[0-9]{4})?" required value={zip} maxLength={10} onChange={(event) => setZip(event.target.value)} />
-        <p>{copy.consent}</p><button type="submit" disabled={busy}>{busy ? copy.loading : copy.calculate}</button>
-      </form>
-      <div role="status" aria-live="polite">{current?.message}
-        {current?.rates.length ? <ul>{current.rates.map((rate, index) => <li key={index}>
-          {rate.carrier} · {rate.service}: {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(rate.cents / 100)}
-          {rate.estimatedDays ? ` · estimated ${rate.estimatedDays} transit days` : ""}
-        </li>)}</ul> : null}
-      </div><p>{copy.notice}</p>
-    </>}
+    <h2 id="shipping-title">Delivery and pickup</h2>
+    <p>Shipping starts at $15 for small printed items, labels, stickers, cards, and keychains. Larger items, other physical products, or orders with more than four physical units start at $25. One shipping estimate per order.</p>
+    <label><input type="radio" name="estimate-delivery" checked={method === "ship"} onChange={() => setMethod("ship")} />Shipping — item-based estimate</label>
+    <label><input type="radio" name="estimate-delivery" checked={method === "pickup"} onChange={() => setMethod("pickup")} />Free pickup by appointment</label>
+    <p role="status" aria-live="polite">{method === "ship" ? `Estimated shipping for these items: ${formatMoney(estimate)}` : "Pickup: $0. We share pickup instructions when your order is ready."}</p>
+    <p>{TEMPORARY_SHIPPING_NOTICE}</p>
+    <p>Include shipping or pickup in your checkout notes. This estimate is separate from your product subtotal; your order is reviewed before payment.</p>
   </section>;
 }

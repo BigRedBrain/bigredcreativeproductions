@@ -1,4 +1,5 @@
 import type { OrderDraft } from "@/data/orders";
+import { TEMPORARY_SHIPPING_NOTICE } from "@/data/temporary-shipping";
 import { formatMoney } from "@/data/money";
 
 type OrderReviewProps = {
@@ -78,6 +79,11 @@ export default function OrderReview({ draft, hidePaymentNote = false }: OrderRev
           <span>{pricingSummary.hasEstimatedPricing ? "Estimated subtotal" : "Order value"}</span>
           <span>{formatMoney(pricingSummary.subtotal)}</span>
         </div>
+        {(pricingSummary.shippingEstimate ?? 0) > 0 && <>
+          <div className="cart-summary-row"><span>Estimated shipping (pickup $0)</span><span>{formatMoney(pricingSummary.shippingEstimate!)}</span></div>
+          <div className="cart-summary-row"><span>Estimated total if shipped</span><span>{formatMoney(pricingSummary.subtotal + pricingSummary.shippingEstimate!)}</span></div>
+          <p className="cart-summary-note">{TEMPORARY_SHIPPING_NOTICE}</p>
+        </>}
         {pricingSummary.depositDue > 0 && (
           <div className="cart-summary-row cart-summary-deposit">
             <span>Deposit expected later</span>
@@ -87,7 +93,7 @@ export default function OrderReview({ draft, hidePaymentNote = false }: OrderRev
         {!hidePaymentNote &&
           (pricingSummary.hasEstimatedPricing ? (
             <p className="cart-summary-note">
-              Some items are starting prices. Final price subject to confirmation — no payment is being
+              Final product and delivery pricing is subject to confirmation — no payment is being
               collected.
             </p>
           ) : (

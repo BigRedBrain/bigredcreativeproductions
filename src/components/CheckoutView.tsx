@@ -648,7 +648,7 @@ export default function CheckoutView() {
           </p>
           {orderResult.status === "needs-review" && (
             <p className="checkout-submitted-warning">
-              This order includes starting-price items, so we&apos;ll confirm final pricing with you before work
+              We&apos;ll confirm final product and delivery pricing with you before work
               begins.
             </p>
           )}

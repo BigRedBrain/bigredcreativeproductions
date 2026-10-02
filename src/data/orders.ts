@@ -1,3 +1,4 @@
+import { temporaryShippingEstimate, TEMPORARY_SHIPPING_NOTICE } from "./temporary-shipping";
 import { siteConfig } from "@/config/site";
 import type { CartAddOnSelection, CartItem, CartOptionSelection, CartPackageSelection } from "./cart";
 import { calculateLineSubtotal } from "./cart-pricing";
@@ -197,6 +198,7 @@ export type OrderAddress = {
 
 export type OrderPricingSummary = {
   subtotal: number;
+  shippingEstimate?: number;
   depositDue: number;
   hasEstimatedPricing: boolean;
 };
@@ -248,7 +250,8 @@ export function buildOrderDraft(items: CartItem[], customer: OrderCustomer, note
   const lines = items.map(cartItemToOrderLine);
   const subtotal = lines.reduce((sum, line) => sum + line.lineSubtotal, 0);
   const depositDue = lines.reduce((sum, line) => sum + (line.depositAmount ?? 0), 0);
-  const hasEstimatedPricing = lines.some((line) => line.purchaseMode === "starting-price");
+  const shippingEstimate = temporaryShippingEstimate(items);
+  const hasEstimatedPricing = shippingEstimate > 0 || lines.some((line) => line.purchaseMode === "starting-price");
   const now = new Date().toISOString();
 
   return {
@@ -258,8 +261,8 @@ export function buildOrderDraft(items: CartItem[], customer: OrderCustomer, note
     status: hasEstimatedPricing ? "needs-review" : "submitted",
     customer,
     lines,
-    pricingSummary: { subtotal, depositDue, hasEstimatedPricing },
-    notes: notes.trim() ? notes.trim() : undefined,
+    pricingSummary: { subtotal, depositDue, hasEstimatedPricing, ...(shippingEstimate > 0 ? { shippingEstimate } : {}) },
+    notes: [notes.trim(), shippingEstimate > 0 ? `Temporary shipping estimate: ${formatMoney(shippingEstimate)} (pickup $0). ${TEMPORARY_SHIPPING_NOTICE}` : ""].filter(Boolean).join("\n\n") || undefined,
   };
 }
 
