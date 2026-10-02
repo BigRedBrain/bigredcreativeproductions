@@ -49,6 +49,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
         <p className="product-card-price">{formatPricingSummary(product.pricing)}</p>
       </div>
+      <p className="store-card-summary">{product.summary}</p>
+      <div className="store-card-action"><span>{product.productType === "physical" ? "Custom physical product" : "Creative service"}</span><b>{product.pricing.mode === "inquiry" ? "Request a quote" : "Choose options"}</b></div>
     </article>
   );
 }

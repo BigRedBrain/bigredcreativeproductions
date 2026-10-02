@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import type { Product } from "@/data/products";
 import type { ProductConfiguration } from "@/data/cart";
 import { buildCartItem, isConfigurationValid } from "@/data/cart";
+import { calculateLineSubtotal } from "@/data/cart-pricing";
 import { formatMoney } from "@/data/money";
 import { useCart } from "./CartProvider";
 import ProductOptions from "./ProductOptions";
@@ -91,7 +92,7 @@ export default function ProductPurchasePanel({ product }: ProductPurchasePanelPr
 
         <div className="product-config-preview">
           <span>{isEstimate ? "Estimated price" : "Price"}</span>
-          <b>{previewItem ? formatMoney(previewItem.unitPrice * quantity) : "—"}</b>
+          <b>{previewItem ? formatMoney(calculateLineSubtotal(previewItem)) : "—"}</b>
         </div>
 
         <button type="button" className="round-button" onClick={handleAddToCart} disabled={!canAddToCart}>
