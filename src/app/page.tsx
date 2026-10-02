@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import CreativeSplash from "@/components/CreativeSplash";
 import Ticker from "@/components/Ticker";
 import Manifesto from "@/components/Manifesto";
 import Statement from "@/components/Statement";
@@ -17,7 +16,6 @@ export default function Home() {
   return (
     <BrandTokens>
       <main>
-        <CreativeSplash />
         {isSectionEnabled("header") && <Header />}
         {isSectionEnabled("hero") && <Hero />}
         {isSectionEnabled("ticker") && <Ticker />}
