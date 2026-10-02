@@ -27,6 +27,7 @@ export const RATE_LIMIT_SCOPES = [
   "video_upload_token_ip",
   "order_creation_ip",
   "payment_initiation_ip",
+  "shipping_quote_ip",
 ] as const;
 export type RateLimitScope = (typeof RATE_LIMIT_SCOPES)[number];
 
@@ -134,6 +135,10 @@ async function countHistoricalImageGenerations(tx: Tx, adminUserId: string, wind
 // tiers (5/5min, 3/5min) are new, additive short-window abuse protection on
 // top of those existing caps, per the approved Phase 21A architecture.
 const RATE_LIMIT_TIERS: Record<RateLimitScope, readonly RateLimitTier[]> = {
+  shipping_quote_ip: [
+    { tierId: "burst", limit: 5, windowMs: FIVE_MINUTES_MS },
+    { tierId: "hourly", limit: 20, windowMs: ONE_HOUR_MS },
+  ],
   brain_admin: [
     { tierId: "burst", limit: 5, windowMs: FIVE_MINUTES_MS },
     { tierId: "daily", limit: 20, windowMs: TWENTY_FOUR_HOURS_MS, historicalCount: countHistoricalBrainRequests },

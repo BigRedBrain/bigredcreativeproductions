@@ -14,7 +14,9 @@ export default async function ProductDetails({ product }: ProductDetailsProps) {
     <section className="studio section">
       <div className="studio-copy">
         <h2>Product overview</h2>
-        <p>{product.fullDescription}</p>
+        {product.fullDescription.split(/\n+/).filter(Boolean).map((paragraph, index) => (
+          <p key={index}>{paragraph}</p>
+        ))}
       </div>
       <dl className="project-meta">
         <div>

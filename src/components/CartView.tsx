@@ -4,6 +4,7 @@ import { useCart } from "./CartProvider";
 import CartItemRow from "./CartItemRow";
 import CartSummary from "./CartSummary";
 import CartEmptyState from "./CartEmptyState";
+import ShippingCalculator from "./ShippingCalculator";
 
 export default function CartView() {
   const { items } = useCart();
@@ -18,6 +19,7 @@ export default function CartView() {
         {items.map((item) => (
           <CartItemRow key={item.cartLineId} item={item} />
         ))}
+        <ShippingCalculator items={items} />
       </div>
       <CartSummary items={items} />
     </div>
