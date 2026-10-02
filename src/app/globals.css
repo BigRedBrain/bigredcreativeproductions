@@ -339,8 +339,14 @@ legend{padding:0}
 [data-motion="slide_right"][data-motion-visible="true"]{opacity:1;transform:translateX(0)}
 [data-motion="scale_in"]{opacity:0;transform:scale(.94);transition:opacity var(--motion-duration) var(--motion-ease),transform var(--motion-duration) var(--motion-ease)}
 [data-motion="scale_in"][data-motion-visible="true"]{opacity:1;transform:scale(1)}
-[data-motion="reveal"]{opacity:0;clip-path:inset(0 0 100% 0);transition:opacity var(--motion-duration) var(--motion-ease),clip-path var(--motion-duration) var(--motion-ease)}
-[data-motion="reveal"][data-motion-visible="true"]{opacity:1;clip-path:inset(0 0 0% 0)}
+/* "reveal" clips the wrapper's CHILDREN, never the observed wrapper itself:
+   a clip-path of inset(0 0 100% 0) on the observed element shrinks its
+   clipped area to zero, so Chrome's IntersectionObserver never reports it
+   as intersecting and the section stays invisible forever. */
+[data-motion="reveal"]{opacity:0;transition:opacity var(--motion-duration) var(--motion-ease)}
+[data-motion="reveal"]>*{clip-path:inset(0 0 100% 0);transition:clip-path var(--motion-duration) var(--motion-ease)}
+[data-motion="reveal"][data-motion-visible="true"]{opacity:1}
+[data-motion="reveal"][data-motion-visible="true"]>*{clip-path:inset(0 0 0% 0)}
 
 /* Stagger containers — the container itself is observed once; its DIRECT
    CHILDREN animate with a fixed, non-admin-configurable per-child delay,
@@ -399,7 +405,7 @@ legend{padding:0}
    correct, only to be efficient (see useMotionEntrance's own
    prefers-reduced-motion check). */
 @media (prefers-reduced-motion: reduce){
-  [data-motion],[data-motion-container],[data-motion-container]>*,
+  [data-motion],[data-motion]>*,[data-motion-container],[data-motion-container]>*,
   .hero[data-motion="cinematic_reveal"] .hero-sticker,
   .hero[data-motion="cinematic_reveal"] .hero-meta,
   .hero[data-motion="cinematic_reveal"] h1,
