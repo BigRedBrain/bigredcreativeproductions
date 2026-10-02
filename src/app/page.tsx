@@ -1,3 +1,4 @@
+import "./home-spacing.css";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Ticker from "@/components/Ticker";
@@ -15,7 +16,7 @@ import { isSectionEnabled } from "@/config/sections";
 export default function Home() {
   return (
     <BrandTokens>
-      <main>
+      <main className="home-page">
         {isSectionEnabled("header") && <Header />}
         {isSectionEnabled("hero") && <Hero hideVideo />}
         {isSectionEnabled("ticker") && <Ticker />}

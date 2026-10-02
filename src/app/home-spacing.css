@@ -1,0 +1,25 @@
+/* Compact spacing for the home page only. */
+.home-page {
+  --section-padding-y-sm: clamp(40px, 5vw, 72px);
+  --section-padding-y-md: clamp(48px, 6vw, 88px);
+  --section-padding-y-lg: clamp(48px, 6vw, 88px);
+}
+.home-page .hero {
+  min-height: 0;
+  justify-content: flex-start;
+  gap: 24px;
+  padding-block: clamp(28px, 4vw, 56px);
+}
+.home-page .hero h1 { margin: 24px 0 12px; }
+.home-page .hero-tagline { align-self: flex-start; margin-bottom: 8px; }
+.home-page .hero-foot { margin-top: 8px; }
+.home-page .sticker-one { top: 90px; }
+.home-page .sticker-two { bottom: 100px; }
+.home-page .section-top { margin-bottom: 40px; }
+@media (max-width: 560px) {
+  .home-page .section, .home-page .manifesto { padding: 44px 22px; }
+  .home-page .statement, .home-page .contact { padding: 48px 22px; }
+  .home-page .hero { gap: 18px; }
+  .home-page .hero h1 { margin: 18px 0 8px; }
+  .home-page .section-top { margin-bottom: 28px; }
+}
