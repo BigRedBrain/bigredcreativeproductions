@@ -1,3 +1,4 @@
+import { bundleSubtotal, isValidQuantityBundles } from "./quantity-bundles";
 import type { CartItem } from "./cart";
 
 // The only place that computes totals from CartItem[]. Everything here is
@@ -16,6 +17,11 @@ function calculateAddOnsTotal(item: CartItem): number {
 }
 
 export function calculateLineSubtotal(item: CartItem): number {
+  if (isValidQuantityBundles(item.quantityBundles) && Number.isInteger(item.quantity) && item.quantity >= 1 && item.quantity <= 100000) {
+    const single = item.quantityBundles.find(b => b.quantity === 1)!;
+    const optionDelta = item.unitPrice - single.totalPrice;
+    return bundleSubtotal(item.quantity, item.quantityBundles) + optionDelta * item.quantity + calculateAddOnsTotal(item);
+  }
   return item.unitPrice * item.quantity + calculateAddOnsTotal(item);
 }
 

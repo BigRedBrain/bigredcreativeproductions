@@ -22,7 +22,8 @@ export default function CartQuantityControl({ quantity, onChange, label }: CartQ
       <button
         type="button"
         className="cart-quantity-button"
-        onClick={() => onChange(quantity + 1)}
+        onClick={() => onChange(Math.min(100000, quantity + 1))}
+        disabled={quantity >= 100000}
         aria-label={`Increase quantity for ${label}`}
       >
         +

@@ -34,7 +34,7 @@ export default async function Footer({ brandVariant = "published" }: FooterProps
       <div className="footer-bottom">
         <span>{settings.legalName}</span>
         <span>{settings.tagline}</span>
-        <a href={`#${sectionAnchors.hero}`}>{footer.backToTopLabel}</a>
+        <a href={`/#${sectionAnchors.hero}`}>{footer.backToTopLabel}</a>
       </div>
     </footer>
   );

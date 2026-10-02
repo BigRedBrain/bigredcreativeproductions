@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
@@ -42,6 +43,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   }
   return {
     title: project.seo.title,
+    alternates: { canonical: `/work/${encodeURIComponent(slug)}` },
     description: project.seo.description,
     openGraph: {
       title: project.title,
@@ -65,6 +67,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     <BrandTokens>
       <main>
         <Header />
+        <div id="main-content" tabIndex={-1} />
+        <nav className="detail-breadcrumb" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/#work">Work</Link></nav>
         <ProjectHero project={project} />
         <ProjectDetails project={project} />
         {project.gallery && project.gallery.length > 0 && (

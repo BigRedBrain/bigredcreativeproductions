@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Image from "next/image";
 import { hero } from "@/data/homepage";
 import { getPublishedHeroContent, getSiteSettings } from "@/server/queries/site-content";
@@ -53,7 +54,7 @@ export default async function Hero({ content: contentOverride, motionVariant = "
       <div className="hero-tagline">{content.tagline}</div>
 
       <div className="hero-foot">
-        <p>{content.supportingCopy}</p>
+        <div className="hero-intro"><p>{content.supportingCopy}</p><div className="hero-shop-actions"><Link href="/store" className="shop-products-link">Shop products →</Link><Link href="/#contact">Request a custom quote</Link></div></div>
         <Button
           href={content.ctaHref}
           className="round-button"

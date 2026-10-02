@@ -8,6 +8,7 @@ import { getPublishedProducts } from "@/server/queries/catalog";
 import { storeIntro } from "@/data/store";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/store" },
   title: storeIntro.seo.title,
   description: storeIntro.seo.description,
 };
@@ -25,6 +26,7 @@ export default async function StorePage() {
     <BrandTokens>
       <main>
         <Header />
+        <div id="main-content" tabIndex={-1} />
         <section className="section store-shop">
           <div className="store-shop-intro">
             <div><span className="kicker">The Big Red shop</span><h1>Make it yours.</h1><p>Branding, websites, custom print, and personalized gifts. Find the right product for your next idea.</p></div>

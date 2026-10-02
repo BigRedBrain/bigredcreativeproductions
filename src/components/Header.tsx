@@ -31,7 +31,8 @@ export default async function Header({ brandVariant = "published" }: HeaderProps
 
   return (
     <header className="site-header">
-      <a className="logo" href={`#${sectionAnchors.hero}`} aria-label={`${settings.siteName} home`}>
+      <a className="skip-link" href="#main-content">Skip to content</a>
+      <a className="logo" href={`/#${sectionAnchors.hero}`} aria-label={`${settings.siteName} home`}>
         <Image
           src={brand.logoHorizontalSrc}
           alt={settings.siteName}

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
@@ -41,6 +42,7 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
   }
   return {
     title: service.seo.title,
+    alternates: { canonical: `/services/${encodeURIComponent(slug)}` },
     description: service.seo.description,
     openGraph: {
       title: service.title,
@@ -62,6 +64,8 @@ export default async function ServicePage({ params }: ServicePageProps) {
     <BrandTokens>
       <main>
         <Header />
+        <div id="main-content" tabIndex={-1} />
+        <nav className="detail-breadcrumb" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/#services">Services</Link></nav>
         <ServiceHero service={service} />
         <ServiceCapabilities service={service} />
         <ServiceDeliverables service={service} />

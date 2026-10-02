@@ -84,6 +84,8 @@ export default function ProductPurchasePanel({ product }: ProductPurchasePanelPr
         <ProductAddOns product={product} selectedAddOnSlugs={selectedAddOnSlugs} onToggleAddOn={toggleAddOn} />
       )}
 
+      {previewItem?.quantityBundles && <p>Advertised quantity bundles apply automatically. Extra units use the single-item price; options and add-ons are additional.</p>}
+
       <div className="product-purchase-footer">
         <div className="product-config-quantity">
           <span>Quantity</span>
@@ -103,6 +105,7 @@ export default function ProductPurchasePanel({ product }: ProductPurchasePanelPr
 
       <p aria-live="polite" className="product-purchase-confirmation">
         {confirmation}
+        {confirmation && <a href="/cart" className="product-cart-next">View cart →</a>}
       </p>
     </section>
   );

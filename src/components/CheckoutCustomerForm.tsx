@@ -36,7 +36,7 @@ export default function CheckoutCustomerForm({
         <label>
           First name
           <input
-            name="firstName"
+            name="firstName" autoComplete="given-name"
             required
             value={customer.firstName}
             onChange={(event) => handleField("firstName", event.target.value)}
@@ -45,7 +45,7 @@ export default function CheckoutCustomerForm({
         <label>
           Last name
           <input
-            name="lastName"
+            name="lastName" autoComplete="family-name"
             required
             value={customer.lastName}
             onChange={(event) => handleField("lastName", event.target.value)}
@@ -54,7 +54,7 @@ export default function CheckoutCustomerForm({
         <label>
           Email
           <input
-            name="email"
+            name="email" autoComplete="email"
             type="email"
             required
             value={customer.email}
@@ -64,7 +64,7 @@ export default function CheckoutCustomerForm({
         <label>
           Phone <span className="checkout-optional">(optional)</span>
           <input
-            name="phone"
+            name="phone" autoComplete="tel"
             type="tel"
             value={customer.phone ?? ""}
             onChange={(event) => handleField("phone", event.target.value)}
@@ -73,14 +73,14 @@ export default function CheckoutCustomerForm({
         <label>
           Company <span className="checkout-optional">(optional)</span>
           <input
-            name="company"
+            name="company" autoComplete="organization"
             value={customer.company ?? ""}
             onChange={(event) => handleField("company", event.target.value)}
           />
         </label>
         <label>
           Notes <span className="checkout-optional">(optional)</span>
-          <textarea name="notes" value={notes} onChange={(event) => onNotesChange(event.target.value)} />
+          <textarea placeholder="Include names, dimensions, artwork details, your deadline, and shipping or pickup preference." name="notes" value={notes} onChange={(event) => onNotesChange(event.target.value)} />
         </label>
       </fieldset>
 

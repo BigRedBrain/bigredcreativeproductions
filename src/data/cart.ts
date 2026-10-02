@@ -1,3 +1,4 @@
+import { getQuantityBundles, type QuantityBundle } from "./quantity-bundles";
 import type { AddOnChargeType, Product, ProductPackage, ProductType, PurchaseMode } from "./products";
 
 // The cart schema version travels inside the persisted localStorage
@@ -58,6 +59,8 @@ export type CartItem = {
   // priceDelta. Add-ons are NOT included here — they're priced separately
   // per their own chargeType, see cart-pricing.ts.
   unitPrice: number;
+  // Frozen advertised quantity offers; options and add-ons remain separate.
+  quantityBundles?: QuantityBundle[];
   // Cents, only present when purchaseMode === "deposit".
   depositAmount?: number;
 
@@ -185,6 +188,7 @@ export function buildCartItem(product: Product, configuration: ProductConfigurat
     selectedOptions,
     selectedAddOns,
     unitPrice,
+    quantityBundles: selectedPackage ? undefined : getQuantityBundles(product),
     depositAmount: product.pricing.mode === "deposit" ? product.pricing.depositAmount : undefined,
     addedAt: new Date().toISOString(),
   };

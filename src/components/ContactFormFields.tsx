@@ -55,19 +55,19 @@ export default function ContactFormFields({ form, submitLabel, contactEmail }: C
 
         <label>
           {form.nameLabel}
-          <input name="name" required placeholder={form.namePlaceholder} />
+          <input name="name" autoComplete="name" required placeholder={form.namePlaceholder} />
         </label>
         <label>
           {form.emailLabel}
-          <input name="email" type="email" required placeholder={form.emailPlaceholder} />
+          <input name="email" autoComplete="email" type="email" required placeholder={form.emailPlaceholder} />
         </label>
         <label>
           {form.phoneLabel}
-          <input name="phone" type="tel" placeholder={form.phonePlaceholder} />
+          <input name="phone" autoComplete="tel" type="tel" placeholder={form.phonePlaceholder} />
         </label>
         <label>
           {form.companyLabel}
-          <input name="company" placeholder={form.companyPlaceholder} />
+          <input name="company" autoComplete="organization" placeholder={form.companyPlaceholder} />
         </label>
         <label>
           {form.serviceLabel}

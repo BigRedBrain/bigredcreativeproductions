@@ -1,4 +1,5 @@
 import "./home-spacing.css";
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Ticker from "@/components/Ticker";
@@ -13,11 +14,14 @@ import Footer from "@/components/Footer";
 import BrandTokens from "@/components/BrandTokens";
 import { isSectionEnabled } from "@/config/sections";
 
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
 export default function Home() {
   return (
     <BrandTokens>
       <main className="home-page">
         {isSectionEnabled("header") && <Header />}
+        <div id="main-content" tabIndex={-1} />
         {isSectionEnabled("hero") && <Hero hideVideo />}
         {isSectionEnabled("ticker") && <Ticker />}
         {isSectionEnabled("manifesto") && <Manifesto />}

@@ -43,6 +43,7 @@ export default function CartItemRow({ item }: CartItemRowProps) {
             </div>
           )}
         </dl>
+        {item.quantityBundles && <p className="cart-item-estimate">Advertised bundle pricing applied automatically.</p>}
         {isEstimate && <p className="cart-item-estimate">Starting price — final price subject to confirmation</p>}
       </div>
 

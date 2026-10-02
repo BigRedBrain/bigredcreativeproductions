@@ -1,5 +1,7 @@
 "use client";
 
+import { isValidQuantityBundles } from "@/data/quantity-bundles";
+
 import { createContext, useContext, useEffect, useReducer, useRef, type ReactNode } from "react";
 import type { CartItem, CartState } from "@/data/cart";
 import { CART_SCHEMA_VERSION, getConfigurationSignature } from "@/data/cart";
@@ -69,6 +71,7 @@ export function isValidCartItem(value: unknown): value is CartItem {
     Array.isArray(item.selectedOptions) &&
     Array.isArray(item.selectedAddOns) &&
     typeof item.unitPrice === "number" &&
+    (item.quantityBundles === undefined || isValidQuantityBundles(item.quantityBundles)) &&
     typeof item.addedAt === "string"
   );
 }

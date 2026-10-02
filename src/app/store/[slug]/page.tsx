@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
@@ -44,6 +45,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   }
   return {
     title: product.seo.title,
+    alternates: { canonical: `/store/${encodeURIComponent(slug)}` },
     description: product.seo.description,
     openGraph: {
       title: product.title,
@@ -68,6 +70,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <BrandTokens>
       <main>
         <Header />
+        <div id="main-content" tabIndex={-1} />
+        <nav className="detail-breadcrumb" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/store">Store</Link></nav>
         <ProductHero product={product} />
         {gallery.length > 0 && <ProductMedia media={gallery} />}
         <ProductDetails product={product} />
