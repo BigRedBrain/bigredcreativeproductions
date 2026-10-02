@@ -15,6 +15,7 @@ type HeroProps = {
   // public page will render, not a reconstruction). Omitted everywhere
   // else, which reads the live PUBLISHED row as before.
   content?: HeroContent;
+  hideVideo?: boolean;
   // Phase 19D-1 — "published" (default) everywhere public; "draft" is
   // used only by /admin/website/motion/preview, mirroring Header/Footer's
   // existing brandVariant prop pattern exactly.
@@ -27,7 +28,7 @@ type HeroProps = {
 // stay code-owned presentational/accessibility details, not part of the
 // admin-editable content set. No hero image or secondary CTA is rendered
 // this phase — those columns exist but are reserved, per Phase 14 scope.
-export default async function Hero({ content: contentOverride, motionVariant = "published" }: HeroProps = {}) {
+export default async function Hero({ content: contentOverride, motionVariant = "published", hideVideo = false }: HeroProps = {}) {
   const [content, settings, motion] = await Promise.all([
     contentOverride ? Promise.resolve(contentOverride) : getPublishedHeroContent(),
     getSiteSettings(),
@@ -69,7 +70,7 @@ export default async function Hero({ content: contentOverride, motionVariant = "
           well below full-bleed). VideoMedia is reused completely
           unmodified — no autoplay, no forced mute/loop, controls always
           visible, playback always user-initiated. */}
-      {content.heroMediaMode === "video" && content.heroVideoSrc ? (
+      {!hideVideo && content.heroMediaMode === "video" && content.heroVideoSrc ? (
         <div className="hero-media">
           <VideoMedia src={content.heroVideoSrc} alt={content.heroImageAlt ?? ""} posterSrc={content.heroPosterSrc ?? undefined} />
         </div>

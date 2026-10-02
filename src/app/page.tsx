@@ -17,7 +17,7 @@ export default function Home() {
     <BrandTokens>
       <main>
         {isSectionEnabled("header") && <Header />}
-        {isSectionEnabled("hero") && <Hero />}
+        {isSectionEnabled("hero") && <Hero hideVideo />}
         {isSectionEnabled("ticker") && <Ticker />}
         {isSectionEnabled("manifesto") && <Manifesto />}
         {isSectionEnabled("services") && <Services />}
