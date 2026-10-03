@@ -13,12 +13,18 @@ import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import BrandTokens from "@/components/BrandTokens";
 import { isSectionEnabled } from "@/config/sections";
+import JsonLd from "@/components/JsonLd";
+import { getSiteSettings } from "@/server/queries/site-content";
+import { getPublishedServices } from "@/server/queries/services";
+import { buildOrganizationJsonLd } from "@/data/structured-data";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
-export default function Home() {
+export default async function Home() {
+  const [settings, services] = await Promise.all([getSiteSettings(), getPublishedServices()]);
   return (
     <BrandTokens>
+      <JsonLd data={buildOrganizationJsonLd(settings, services)} />
       <main className="home-page">
         {isSectionEnabled("header") && <Header />}
         <div id="main-content" tabIndex={-1} />

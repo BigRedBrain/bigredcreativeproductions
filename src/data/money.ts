@@ -20,6 +20,14 @@ const PURCHASE_MODE_LABELS: Record<PurchaseMode, string> = {
   "full-payment": "Paid in full",
 };
 
+// Formats integer cents as a plain decimal string with no currency symbol,
+// e.g. 50000 -> "500.00" — the machine-readable shape schema.org Offer
+// prices expect. Lives here so this file stays the only place that divides
+// a Money value by 100.
+export function formatMoneyDecimal(cents: number): string {
+  return (cents / 100).toFixed(2);
+}
+
 export function getPurchaseModeLabel(mode: PurchaseMode): string {
   return PURCHASE_MODE_LABELS[mode];
 }

@@ -11,6 +11,9 @@ import ServiceProcess from "@/components/ServiceProcess";
 import ServiceGallery from "@/components/ServiceGallery";
 import ServiceCTA from "@/components/ServiceCTA";
 import { getPublishedServices, getServiceBySlug } from "@/server/queries/services";
+import JsonLd from "@/components/JsonLd";
+import { getSiteSettings } from "@/server/queries/site-content";
+import { buildServiceJsonLd } from "@/data/structured-data";
 
 // Published slugs known at build time are pre-rendered; anything else (a
 // service published since the last build) renders on demand instead of
@@ -60,8 +63,11 @@ export default async function ServicePage({ params }: ServicePageProps) {
     notFound();
   }
 
+  const settings = await getSiteSettings();
+
   return (
     <BrandTokens>
+      <JsonLd data={buildServiceJsonLd(service, settings)} />
       <main>
         <Header />
         <div id="main-content" tabIndex={-1} />

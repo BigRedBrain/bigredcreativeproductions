@@ -10,6 +10,9 @@ import ProjectGallery from "@/components/ProjectGallery";
 import ProjectResults from "@/components/ProjectResults";
 import ProjectNavigation from "@/components/ProjectNavigation";
 import { getPublishedProjects, getProjectBySlug, getAdjacentProjects } from "@/server/queries/portfolio";
+import JsonLd from "@/components/JsonLd";
+import { getSiteSettings } from "@/server/queries/site-content";
+import { buildProjectJsonLd } from "@/data/structured-data";
 
 // Published slugs known at build time are pre-rendered; anything else (a
 // project published since the last build) renders on demand instead of
@@ -61,10 +64,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     notFound();
   }
 
-  const { previous, next } = await getAdjacentProjects(slug);
+  const [{ previous, next }, settings] = await Promise.all([getAdjacentProjects(slug), getSiteSettings()]);
 
   return (
     <BrandTokens>
+      <JsonLd data={buildProjectJsonLd(project, settings)} />
       <main>
         <Header />
         <div id="main-content" tabIndex={-1} />
