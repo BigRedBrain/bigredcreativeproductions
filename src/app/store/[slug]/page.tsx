@@ -15,6 +15,9 @@ import ProductCTA from "@/components/ProductCTA";
 import ProductPurchasePanel from "@/components/ProductPurchasePanel";
 import { getPublishedProducts, getProductBySlug } from "@/server/queries/catalog";
 import { isCartEligible } from "@/data/cart";
+import JsonLd from "@/components/JsonLd";
+import { getSiteSettings } from "@/server/queries/site-content";
+import { buildProductJsonLd } from "@/data/structured-data";
 
 // Published slugs known at build time are pre-rendered; anything else
 // (a product published since the last build) renders on demand instead of
@@ -65,9 +68,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const gallery = product.media.slice(1);
   const eligible = isCartEligible(product);
+  const settings = await getSiteSettings();
 
   return (
     <BrandTokens>
+      <JsonLd data={buildProductJsonLd(product, settings)} />
       <main>
         <Header />
         <div id="main-content" tabIndex={-1} />
