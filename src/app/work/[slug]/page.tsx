@@ -13,6 +13,7 @@ import { getPublishedProjects, getProjectBySlug, getAdjacentProjects } from "@/s
 import JsonLd from "@/components/JsonLd";
 import { getSiteSettings } from "@/server/queries/site-content";
 import { buildProjectJsonLd } from "@/data/structured-data";
+import { shareImagesFor } from "@/data/share-image";
 
 // Published slugs known at build time are pre-rendered; anything else (a
 // project published since the last build) renders on demand instead of
@@ -52,6 +53,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
       title: project.title,
       description: project.seo.description,
       type: "article",
+      images: shareImagesFor(project.heroImage),
     },
   };
 }

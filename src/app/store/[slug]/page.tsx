@@ -18,6 +18,7 @@ import { isCartEligible } from "@/data/cart";
 import JsonLd from "@/components/JsonLd";
 import { getSiteSettings } from "@/server/queries/site-content";
 import { buildProductJsonLd } from "@/data/structured-data";
+import { shareImagesFor } from "@/data/share-image";
 
 // Published slugs known at build time are pre-rendered; anything else
 // (a product published since the last build) renders on demand instead of
@@ -54,6 +55,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       title: product.title,
       description: product.seo.description,
       type: "website",
+      images: shareImagesFor(product.media[0]),
     },
   };
 }
