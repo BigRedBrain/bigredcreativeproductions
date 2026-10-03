@@ -14,6 +14,7 @@ import { getPublishedServices, getServiceBySlug } from "@/server/queries/service
 import JsonLd from "@/components/JsonLd";
 import { getSiteSettings } from "@/server/queries/site-content";
 import { buildServiceJsonLd } from "@/data/structured-data";
+import { shareImagesFor } from "@/data/share-image";
 
 // Published slugs known at build time are pre-rendered; anything else (a
 // service published since the last build) renders on demand instead of
@@ -51,6 +52,7 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
       title: service.title,
       description: service.seo.description,
       type: "website",
+      images: shareImagesFor(service.heroImage),
     },
   };
 }
