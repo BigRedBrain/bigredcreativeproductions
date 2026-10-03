@@ -9,6 +9,21 @@ import { DEFAULT_SHARE_IMAGE } from "@/data/share-image";
 // description take effect without a redeploy. getSiteSettings() is
 // field-level-fallback-safe against src/config/site.ts, so this can never
 // render blank metadata even if the DB row is incomplete.
+// Search engine ownership verification (Google Search Console, Bing
+// Webmaster Tools). Optional: set either variable in Vercel to the token
+// the tool gives you and the matching <meta> tag is rendered on every page;
+// leave it unset and no tag is rendered. Only needed for the meta-tag
+// verification method — DNS verification needs no code at all.
+function buildVerification(): Metadata["verification"] {
+  const google = process.env.GOOGLE_SITE_VERIFICATION?.trim();
+  const bing = process.env.BING_SITE_VERIFICATION?.trim();
+  if (!google && !bing) return undefined;
+  return {
+    ...(google ? { google } : {}),
+    ...(bing ? { other: { "msvalidate.01": bing } } : {}),
+  };
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   return {
@@ -28,6 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: settings.ogImageSrc ? [{ url: settings.ogImageSrc }] : [DEFAULT_SHARE_IMAGE],
     },
     twitter: { card: "summary_large_image" },
+    verification: buildVerification(),
   };
 }
 
