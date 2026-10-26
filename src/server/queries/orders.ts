@@ -21,7 +21,7 @@ export type OrderListRow = {
   paymentStatus: string;
   source: string;
   customerName: string;
-  customerEmail: string;
+  customerEmail: string | null;
   subtotal: number;
   depositDue: number;
   hasEstimatedPricing: boolean;
@@ -156,7 +156,7 @@ export type OrderDetail = {
     id: string;
     firstName: string;
     lastName: string;
-    email: string;
+    email: string | null;
     phone: string | null;
     company: string | null;
   };

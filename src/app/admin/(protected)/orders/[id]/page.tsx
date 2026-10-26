@@ -175,7 +175,7 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
             </div>
             <div className="admin-detail-row">
               <span className="admin-detail-label">Email</span>
-              <span>{order.customer.email}</span>
+              <span>{order.customer.email ?? "—"}</span>
             </div>
             {order.customer.phone && (
               <div className="admin-detail-row">

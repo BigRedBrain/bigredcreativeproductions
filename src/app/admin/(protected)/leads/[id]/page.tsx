@@ -136,7 +136,7 @@ export default async function AdminLeadDetailPage({ params, searchParams }: Lead
                       <div className="admin-line-item" key={customer.id}>
                         <p className="admin-line-item-title">{customer.name}</p>
                         <p className="admin-line-item-meta">
-                          {customer.email}
+                          {customer.email ?? "No email"}
                           {customer.company ? ` · ${customer.company}` : ""}
                         </p>
                         <LinkCustomerButton leadId={lead.id} customerId={customer.id} />

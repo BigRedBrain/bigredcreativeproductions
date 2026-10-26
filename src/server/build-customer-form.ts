@@ -4,7 +4,7 @@ import { validateRequiredText, validateEmailShape } from "@/server/validate-webs
 export type CustomerCandidate = {
   firstName: string;
   lastName: string;
-  email: string;
+  email: string | null;
   phone: string | null;
   company: string | null;
 };
@@ -33,7 +33,7 @@ export function splitLeadName(fullName: string): { firstName: string; lastName: 
 
 // The one untrusted-input boundary for customer create/edit — shape
 // parsing and basic field-shape validation only (required first name,
-// required valid-looking email). Duplicate-email checking is NOT done
+// an email that looks valid when one is given). Duplicate-email checking is NOT done
 // here — that needs a database read, so it's mutate-customer.ts's job.
 // `fromLeadId` is an optional hidden field set only when this form was
 // reached via "Create Customer from Lead" — see mutate-customer.ts.
@@ -49,8 +49,12 @@ export function buildCustomerFromFormData(formData: FormData): CustomerFormResul
 
   const firstNameError = validateRequiredText(firstName, "First name");
   if (firstNameError) errors.push(firstNameError);
-  const emailError = validateEmailShape(emailRaw, "Email");
-  if (emailError) errors.push(emailError);
+  // Email is optional (customers imported from shipping history have none),
+  // but when one is given it must look like an email.
+  if (emailRaw) {
+    const emailError = validateEmailShape(emailRaw, "Email");
+    if (emailError) errors.push(emailError);
+  }
 
   if (errors.length > 0) {
     return { ok: false, errors };
@@ -61,7 +65,7 @@ export function buildCustomerFromFormData(formData: FormData): CustomerFormResul
     customer: {
       firstName,
       lastName,
-      email: emailRaw.toLowerCase(),
+      email: emailRaw ? emailRaw.toLowerCase() : null,
       phone: phone || null,
       company: company || null,
     },

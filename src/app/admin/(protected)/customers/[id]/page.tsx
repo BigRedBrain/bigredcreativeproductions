@@ -126,7 +126,7 @@ export default async function AdminCustomerDetailPage({ params }: CustomerDetail
             <h2>Customer</h2>
             <div className="admin-detail-row">
               <span className="admin-detail-label">Email</span>
-              <span>{customer.email}</span>
+              <span>{customer.email ?? "—"}</span>
             </div>
             {customer.phone && (
               <div className="admin-detail-row">

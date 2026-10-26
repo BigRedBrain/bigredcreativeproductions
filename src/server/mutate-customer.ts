@@ -45,7 +45,9 @@ export async function createCustomerAction(
 
   try {
     createdId = await db.transaction(async (tx) => {
-      const existing = await tx.query.customers.findFirst({ where: eq(customers.email, parsed.customer.email) });
+      const existing = parsed.customer.email
+        ? await tx.query.customers.findFirst({ where: eq(customers.email, parsed.customer.email) })
+        : undefined;
       if (existing) {
         throw new Error(`DUPLICATE_EMAIL:${existing.id}`);
       }
@@ -141,7 +143,7 @@ export async function updateCustomerAction(
 
   try {
     await db.transaction(async (tx) => {
-      if (parsed.customer.email !== existing.email) {
+      if (parsed.customer.email && parsed.customer.email !== existing.email) {
         const collision = await tx.query.customers.findFirst({ where: eq(customers.email, parsed.customer.email) });
         if (collision && collision.id !== id) {
           throw new Error("DUPLICATE_EMAIL");

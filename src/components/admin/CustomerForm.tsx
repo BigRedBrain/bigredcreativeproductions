@@ -5,7 +5,7 @@ import type { CustomerFormState } from "@/server/mutate-customer";
 
 type CustomerFormProps = {
   action: (prevState: CustomerFormState, formData: FormData) => Promise<CustomerFormState>;
-  initialCustomer?: { firstName: string; lastName: string; email: string; phone: string | null; company: string | null };
+  initialCustomer?: { firstName: string; lastName: string; email: string | null; phone: string | null; company: string | null };
   fromLeadId?: string;
   submitLabel: string;
 };
@@ -47,7 +47,8 @@ export default function CustomerForm({ action, initialCustomer, fromLeadId, subm
       <div className="admin-form-row">
         <label>
           Email
-          <input type="email" name="email" defaultValue={initialCustomer?.email} required />
+          <span className="admin-form-optional"> (optional)</span>
+          <input type="email" name="email" defaultValue={initialCustomer?.email ?? undefined} />
         </label>
       </div>
 

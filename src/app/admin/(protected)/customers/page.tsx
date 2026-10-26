@@ -49,7 +49,7 @@ export default async function AdminCustomersPage({ searchParams }: CustomersPage
                         {row.name}
                       </Link>
                     </td>
-                    <td>{row.email}</td>
+                    <td>{row.email ?? "—"}</td>
                     <td>{row.company ?? "—"}</td>
                     <td>{row.phone ?? "—"}</td>
                     <td>{row.orderCount}</td>

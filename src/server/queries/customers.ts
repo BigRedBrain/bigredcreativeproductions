@@ -11,7 +11,7 @@ export const CUSTOMERS_PAGE_SIZE = 25;
 export type CustomerListRow = {
   id: string;
   name: string;
-  email: string;
+  email: string | null;
   company: string | null;
   phone: string | null;
   orderCount: number;
@@ -110,7 +110,7 @@ export type CustomerDetail = {
   id: string;
   firstName: string;
   lastName: string;
-  email: string;
+  email: string | null;
   phone: string | null;
   company: string | null;
   createdAt: Date;

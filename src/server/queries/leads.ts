@@ -105,7 +105,7 @@ export type LeadDetail = {
   archivedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
-  customer: { id: string; firstName: string; lastName: string; email: string } | null;
+  customer: { id: string; firstName: string; lastName: string; email: string | null } | null;
   notes: NoteWithAuthor[];
 };
 

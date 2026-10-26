@@ -53,7 +53,7 @@ export default async function AdminNewOrderPage({ searchParams }: NewOrderPagePr
                 <div className="admin-line-item" key={result.id}>
                   <p className="admin-line-item-title">{result.name}</p>
                   <p className="admin-line-item-meta">
-                    {result.email}
+                    {result.email ?? "No email"}
                     {result.company ? ` · ${result.company}` : ""}
                   </p>
                   <Link href={`/admin/orders/new?customerId=${result.id}`} className="admin-secondary-button">
@@ -70,7 +70,7 @@ export default async function AdminNewOrderPage({ searchParams }: NewOrderPagePr
           </p>
           <OrderForm
             customerId={customer.id}
-            customerLabel={`${customer.firstName} ${customer.lastName} — ${customer.email}`}
+            customerLabel={`${customer.firstName} ${customer.lastName}${customer.email ? ` — ${customer.email}` : ""}`}
             catalogProducts={catalogProducts.map((product) => ({ id: product.id, slug: product.slug, title: product.title }))}
           />
         </>

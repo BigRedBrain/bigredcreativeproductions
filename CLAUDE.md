@@ -3825,6 +3825,12 @@ An 18-check condensed re-run of Phase 21C-2D's own offline mock suite (signature
 
 No refund implementation. No live-mode configuration or key of any kind (the test-mode-only guards on both the server `sk_test_` check and the client `pk_test_` check held throughout, and the retrieved PaymentIntent independently confirmed `livemode: false`). No payment architecture change — every finding in this phase was either an expected, already-designed behavior or a testing-methodology detail (the CDP iframe-attachment technique), never a code defect requiring a fix. No commit, no push, no merge — this phase's own working tree is clean (identical to `main` plus this CLAUDE.md update), left for review before any commit.
 
+## Customers without email + shipping-history import
+
+`customers.email` is nullable as of `drizzle/0020_thin_boomerang.sql` (one statement: `ALTER COLUMN "email" DROP NOT NULL`). Checkout still always supplies an email, and `customers_email_unique` still prevents two customers sharing a real address (Postgres treats NULLs as distinct). The admin create/edit form treats email as optional but shape-checks it when given; admin pages show "—" for a missing email.
+
+`scripts/import-shipment-customers.mts` is a one-time import of customer profiles from the Big Red shipping-label history. It reads a JSON file passed on the command line (the customer list is never committed to the repo), defaults to a dry run, writes only with `--apply`, and skips any customer whose first + last name already exists. Each imported customer gets `email: null`, one internal note summarizing their shipments, and a `customer.created` audit event with `{source: "shipments_import"}`, all in one transaction per customer.
+
 ## Structured Data (SEO)
 
 **Status: schema.org JSON-LD is rendered on the homepage and every public detail page, so search engines can classify Big Red as a graphic design / creative production business and connect its services, portfolio and products to it.** Code-only; no schema change, no new dependency.

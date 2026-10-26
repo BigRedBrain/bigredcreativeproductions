@@ -173,7 +173,10 @@ export const customers = pgTable(
     firstName: text("first_name").notNull(),
     lastName: text("last_name").notNull(),
     // Always stored normalized (trim + lowercase) — never trust caller casing.
-    email: text("email").notNull(),
+    // Nullable since customers can be added from shipping history that has
+    // no email. Checkout always supplies one. Postgres treats NULLs as
+    // distinct, so the unique index still prevents two rows sharing a real email.
+    email: text("email"),
     phone: text("phone"),
     company: text("company"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),

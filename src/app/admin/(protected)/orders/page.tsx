@@ -55,7 +55,7 @@ export default async function AdminOrdersPage({ searchParams }: OrdersPageProps)
                     <td>
                       {row.customerName}
                       <br />
-                      {row.customerEmail}
+                      {row.customerEmail ?? "—"}
                     </td>
                     <td>
                       <StatusBadge status={row.status} />
