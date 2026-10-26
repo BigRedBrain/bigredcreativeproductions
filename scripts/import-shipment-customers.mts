@@ -15,7 +15,7 @@
 // Safe to re-run: a customer whose first + last name (case-insensitive)
 // already exists is skipped, never duplicated or overwritten.
 
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { Pool, neonConfig } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-serverless";
 import { and, eq, sql } from "drizzle-orm";
@@ -68,12 +68,15 @@ for (const row of rows) {
   }
 }
 
-const env = loadEnvLocal(new URL("../.env.local", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1"));
-if (!env.DATABASE_URL) {
-  throw new Error("DATABASE_URL not found in .env.local — aborting before any connection is made.");
+// .env.local when run locally; the process environment when run somewhere
+// (e.g. a cloud session) where DATABASE_URL is set as an environment variable.
+const envLocalPath = new URL("../.env.local", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1");
+const databaseUrl = (existsSync(envLocalPath) ? loadEnvLocal(envLocalPath).DATABASE_URL : undefined) ?? process.env.DATABASE_URL;
+if (!databaseUrl) {
+  throw new Error("DATABASE_URL not found in .env.local or the environment — aborting before any connection is made.");
 }
 
-const pool = new Pool({ connectionString: env.DATABASE_URL });
+const pool = new Pool({ connectionString: databaseUrl });
 const db = drizzle(pool, { schema });
 
 function noteBody(row: ImportRow): string {
